@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name: 'postgres'
+    environment:
+      - 'POSTGRES_DB=mechaniq'
+      - 'POSTGRES_PASSWORD=root'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - "5436:5432"
+  backend:
+    image: 'openjdk:21-jdk'
+    container_name: 'spring-boot'
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: >
+      sh -c " ./mvnw spring-boot:run -Dspring-boot.run.profiles=remote -Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"
+    depends_on:
+      - postgres
