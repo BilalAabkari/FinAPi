@@ -6,7 +6,7 @@
 ```
 docker-compose -f docker-compose-remote-spring-boot.yaml down
 docker-compose -f docker-compose-local-spring-boot.yaml down
-docker-compose -f docker-compose-remote-spring-boot.yaml up --build
+docker-compose -f docker-compose-remote-spring-boot.yaml up --build -d
 ```
 
 And that's it, everything boots up with the docker containers. 
@@ -29,7 +29,7 @@ It's configured to work with any JVM docker remote debugging to port 5005!!
 ```
 docker-compose -f docker-compose-remote-spring-boot.yaml down
 docker-compose -f docker-compose-local-spring-boot.yaml down
-docker-compose -f docker-compose-local-spring-boot.yaml up --build
+docker-compose -f docker-compose-local-spring-boot.yaml up --build -d
 ```
 
 Then to run the spring app:
@@ -47,3 +47,5 @@ You can debugg it as usual with any IDE
 ### Configuration
 You can configure everything in application-local.properties or application-remote.properties,
 like database ports, etc.
+
+pgAdmin server password is "root". It's already preconfigured

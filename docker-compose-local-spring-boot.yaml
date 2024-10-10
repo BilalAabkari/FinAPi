@@ -8,3 +8,19 @@ services:
       - 'POSTGRES_USER=postgres'
     ports:
       - "5436:5432"
+    networks:
+      - main_network
+  pgadmin:
+    image: 'dpage/pgadmin4'
+    container_name: 'pgadmin'
+    environment:
+      - 'PGADMIN_DEFAULT_EMAIL=bilalaabkari13@gmail.com'
+      - 'PGADMIN_DEFAULT_PASSWORD=root'
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+    networks:
+      - main_network
+networks:
+  main_network:
