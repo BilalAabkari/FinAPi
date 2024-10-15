@@ -5,11 +5,20 @@ declare module "@mui/material/styles" {
     extraColors: {
       detail: string;
     };
+    gradients: {
+      detail: string;
+      detailInverted: string;
+    };
   }
 
   interface ThemeOptions {
     extraColors?: {
       detail?: string;
+    };
+
+    gradients?: {
+      detail?: string;
+      detailInverted?: string;
     };
   }
 }
@@ -22,6 +31,26 @@ const theme = createTheme({
   },
   extraColors: {
     detail: "#FFC857",
+  },
+  gradients: {
+    detail:
+      "linear-gradient(90deg, rgba(191,128,0,1) 0%, rgba(228,154,3,1) 24%, rgba(255,200,87,1) 100%)",
+    detailInverted:
+      "linear-gradient(90deg, rgba(255,200,87,1) 0%, rgba(228,154,3,1) 76%, rgba(191,128,0,1) 100%)",
+  },
+  typography: {
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
   },
 });
 

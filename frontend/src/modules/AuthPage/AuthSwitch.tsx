@@ -1,6 +1,5 @@
-import { Box, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { useState } from "react";
+import { Box, Typography, useTheme } from "@mui/material";
+import { styled, Theme } from "@mui/material/styles";
 
 const SwitchContainer = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -20,13 +19,15 @@ const Label = styled(Box)({
   cursor: "pointer",
 });
 
-const backgroundColor: string =
-  "linear-gradient(90deg, rgba(191,128,0,1) 0%, rgba(228,154,3,1) 24%, rgba(255,200,87,1) 100%)";
+export type AuthType = "signup" | "login";
 
-type AuthType = "signup" | "login";
+interface AuthSwitchProps {
+  authType: string;
+  onChange: (type: AuthType) => void;
+}
 
-const AuthSwitch = () => {
-  const [authType, setAuthType] = useState<AuthType>("login");
+const AuthSwitch = ({ authType, onChange }: AuthSwitchProps) => {
+  const theme: Theme = useTheme();
 
   return (
     <SwitchContainer>
@@ -34,22 +35,23 @@ const AuthSwitch = () => {
         sx={{
           left: 0,
           borderRight: "1px solid",
-          background: authType === "login" ? backgroundColor : "unset",
+          background:
+            authType === "login" ? theme.gradients.detailInverted : "unset",
         }}
-        onClick={() => setAuthType("login")}
+        onClick={() => onChange("login")}
       >
-        <Typography variant={"h5"} paddingTop={2}>
+        <Typography variant={"body1"} paddingTop={1}>
           Login
         </Typography>
       </Label>
       <Label
         sx={{
           right: 0,
-          background: authType === "signup" ? backgroundColor : "unset",
+          background: authType === "signup" ? theme.gradients.detail : "unset",
         }}
-        onClick={() => setAuthType("signup")}
+        onClick={() => onChange("signup")}
       >
-        <Typography variant={"h5"} paddingTop={2}>
+        <Typography variant={"body1"} paddingTop={1}>
           Signup
         </Typography>
       </Label>
