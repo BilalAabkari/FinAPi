@@ -1,5 +1,6 @@
 import TwoColorBackground from "../../components/Backgrounds";
-import { Paper, styled, Typography } from "@mui/material";
+import { Box, Paper, styled } from "@mui/material";
+import AuthSwitch from "./AuthSwitch.tsx";
 
 const CenteredFormPaper = styled(Paper)({
   width: "30%",
@@ -13,7 +14,9 @@ const AuthPage = () => {
   return (
     <TwoColorBackground>
       <CenteredFormPaper elevation={3}>
-        <Typography>Signup</Typography>
+        <Box sx={{ width: "80%", height: 70, margin: "0 auto", paddingTop: 6 }}>
+          <AuthSwitch />
+        </Box>
       </CenteredFormPaper>
     </TwoColorBackground>
   );
