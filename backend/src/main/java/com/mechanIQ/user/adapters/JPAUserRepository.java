@@ -10,18 +10,24 @@ import java.util.Optional;
 @Repository
 public class JPAUserRepository implements UserRepository {
 
-    private final UserJpaRepository userJpaRepository;
+    private final UserJpaRepositoryBase userJpaRepositoryBase;
 
     @Autowired
-    public JPAUserRepository(UserJpaRepository userJpaRepository) {this.userJpaRepository = userJpaRepository;}
-
-    @Override
-    public Optional<User> findById(Long id) {
-        return userJpaRepository.findById(id);
+    public JPAUserRepository( UserJpaRepositoryBase userJpaRepositoryBase) {
+        this.userJpaRepositoryBase = userJpaRepositoryBase;
     }
 
     @Override
-    public void save(User user) {
+    public Optional<User> findById(Long id) {
+        return userJpaRepositoryBase.findById(id);
+    }
 
+    public Optional<User> findByEmail(String email) {
+        return userJpaRepositoryBase.findByEmail(email);
+    }
+
+    @Override
+    public User save(User user) {
+        return userJpaRepositoryBase.save(user);
     }
 }
