@@ -47,6 +47,10 @@ public class User {
         return email;
     }
 
+    @JsonIgnore
+    public String getPassword() {
+        return this.password;
+    }
 
     public void setName(String name) {
         this.name = name;
