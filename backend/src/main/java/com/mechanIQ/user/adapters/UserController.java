@@ -4,10 +4,7 @@ import com.mechanIQ.user.application.UserService;
 import com.mechanIQ.user.domain.User;
 import com.mechanIQ.user.dto.SignupRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -23,5 +20,13 @@ public class UserController {
     @PostMapping("/signup")
     public User signupUser(@RequestBody SignupRequest signupRequest) {
         return this.userService.signup(signupRequest);
+    }
+
+    @PostMapping("/login")
+    public void login(@RequestBody User user) {}
+
+    @GetMapping("/authtest")
+    public String authTest() {
+        return "aa";
     }
 }

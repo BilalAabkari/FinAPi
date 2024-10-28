@@ -53,7 +53,14 @@ pgAdmin server password is "root". It's already preconfigured
 ### Run Configuration
 For spring boot backend, as it's being developed inside docker, you can use this run config in your ide
 to run or rerun:
+
+In windows powershell:
 ```
-docker-compose -f ../docker-compose-remote-spring-boot.yaml logs -f backend
+docker-compose -f ../docker-compose-remote-spring-boot.yaml restart backend ; docker-compose -f ../docker-compose-remote-spring-boot.yaml logs -f backend
+```
+
+in linux:
+```
+docker-compose -f ../docker-compose-remote-spring-boot.yaml restart backend && docker-compose -f ../docker-compose-remote-spring-boot.yaml logs -f backend
 ```
 This will rebuild the app. You can use jetbrains IDE shell spring run config and place this command, or create a shell script manually and run it.
