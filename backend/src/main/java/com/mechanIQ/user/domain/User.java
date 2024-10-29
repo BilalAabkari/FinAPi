@@ -1,7 +1,11 @@
 package com.mechanIQ.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mechanIQ.role.domain.Role;
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "tbl_user")
@@ -17,15 +21,22 @@ public class User {
     @Column(nullable = false)
     private String surname;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @JsonIgnore
     @Column(nullable = false)
     private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "tbl_user_role",
+            joinColumns = @JoinColumn(name = "tbl_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "tbl_role_id"))
+    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -50,6 +61,16 @@ public class User {
     @JsonIgnore
     public String getPassword() {
         return this.password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    @Transactional
+    public void addRole(Role role) {
+        roles.add(role);
+        role.addUser(this);
     }
 
     public void setName(String name) {

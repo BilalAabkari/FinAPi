@@ -27,6 +27,11 @@ public class JPAUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByUsername(String username) {
+        return userJpaRepositoryBase.findByUsername(username);
+    }
+
+    @Override
     public User save(User user) {
         return userJpaRepositoryBase.save(user);
     }
