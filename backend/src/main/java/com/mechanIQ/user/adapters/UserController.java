@@ -1,5 +1,6 @@
 package com.mechanIQ.user.adapters;
 
+import com.mechanIQ.user.application.CustomUserDetailsService;
 import com.mechanIQ.user.application.UserService;
 import com.mechanIQ.user.domain.User;
 import com.mechanIQ.user.dto.LoginRequest;
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+    public User login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
 
         UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
                 loginRequest.getUsername(),
@@ -51,10 +52,18 @@ public class UserController {
         context.setAuthentication(authentication);
         securityContextHolderStrategy.setContext(context);
         securityContextRepository.saveContext(context, request, response);
+        return userService.findAuthenticatedUser(loginRequest.getUsername(), loginRequest.getUsername());
     }
 
-    @GetMapping("/authtest")
-    public String authTest() {
-        return "aa";
+    @GetMapping("/auth")
+    public User auth() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            org.springframework.security.core.userdetails.UserDetails userDetailsService =
+                    (org.springframework.security.core.userdetails.UserDetails) authentication.getPrincipal();
+            return userService.findAuthenticatedUser(userDetailsService.getUsername(), userDetailsService.getUsername());
+
+        }
+        throw new RuntimeException("User is not authenticated");
     }
 }

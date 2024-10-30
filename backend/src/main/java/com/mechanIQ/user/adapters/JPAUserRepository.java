@@ -32,6 +32,11 @@ public class JPAUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByEmailOrUsername(String email, String password) {
+        return userJpaRepositoryBase.findByEmailOrUsername(email, password);
+    }
+
+    @Override
     public User save(User user) {
         return userJpaRepositoryBase.save(user);
     }

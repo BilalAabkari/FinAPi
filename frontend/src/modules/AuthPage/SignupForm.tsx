@@ -1,4 +1,4 @@
-import { Button, Grid, Link, useTheme } from "@mui/material";
+import { Button, Grid, Link, useMediaQuery, useTheme } from "@mui/material";
 import { EmailInput, PasswordField } from "../../components/FormInputs";
 import { Theme } from "@mui/material/styles";
 import { FormProvider, useForm } from "react-hook-form";
@@ -6,15 +6,16 @@ import { AuthFormsProps } from "./AuthFormsInterfaces.tsx";
 
 const SignupForm = ({ goToAuthType }: AuthFormsProps) => {
   const theme: Theme = useTheme();
+  const isSmallScreen: boolean = useMediaQuery(theme.breakpoints.down("sm"));
   const formMethods = useForm();
 
   return (
     <FormProvider {...formMethods}>
       <Grid container spacing={3}>
-        <Grid item xs={6}>
+        <Grid item xs={isSmallScreen ? 12 : 6}>
           <EmailInput innerLabel={"Name"} name={"name"} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={isSmallScreen ? 12 : 6}>
           <EmailInput innerLabel={"Surname"} name={"surname"} />
         </Grid>
         <Grid item xs={12}>

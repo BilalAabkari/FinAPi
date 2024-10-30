@@ -1,25 +1,17 @@
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
 import { FormInputProps } from "./InputInterfaces.tsx";
 import FormInputLabel from "./FormInputLabel.tsx";
 
 const EmailInput = ({ label, innerLabel, name }: FormInputProps) => {
-  const { control, setError, clearErrors } = useFormContext();
+  const { control } = useFormContext();
 
   const validateEmail = (value: string) => {
-    if (!value) {
-      setError(name, { type: "custom", message: "Email is required" });
-      return value;
-    }
-
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailPattern.test(value)) {
-      setError(name, { type: "custom", message: "Invalid email address" });
-    } else {
-      clearErrors(name);
+      return "Invalid email address";
     }
-    return value;
+    return true;
   };
 
   return (
@@ -29,15 +21,30 @@ const EmailInput = ({ label, innerLabel, name }: FormInputProps) => {
         name={name}
         control={control}
         defaultValue=""
+        rules={{
+          required: "Email is required",
+          validate: validateEmail,
+        }}
         render={({ field, fieldState }) => (
-          <TextField
-            {...field}
-            required
-            label={innerLabel}
-            error={!!fieldState.error}
-            fullWidth
-            onBlur={() => validateEmail(field.value)}
-          />
+          <>
+            {fieldState.error && (
+              <Typography
+                textAlign={"start"}
+                color="error"
+                variant="body2"
+                sx={{ mb: 0.5, paddingBottom: 1 }}
+              >
+                {fieldState.error.message}
+              </Typography>
+            )}
+            <TextField
+              {...field}
+              required
+              label={innerLabel}
+              error={!!fieldState.error}
+              fullWidth
+            />
+          </>
         )}
       />
     </>

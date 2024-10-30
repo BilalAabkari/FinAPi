@@ -1,21 +1,36 @@
 import TwoColorBackground from "../../components/Backgrounds";
-import { Box, Paper, styled, Typography } from "@mui/material";
+import {
+  Box,
+  Paper,
+  styled,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import AuthSwitch, { AuthType } from "./AuthSwitch.tsx";
 
 import LoginForm from "./LoginForm.tsx";
 import { useState } from "react";
 import SignupForm from "./SignupForm.tsx";
+import { Theme } from "@mui/material/styles";
 
-const CenteredFormPaper = styled(Paper)({
-  width: "30%",
-  height: "70%",
+interface CenteredFormPaperProps {
+  isSmallScreen: boolean;
+}
+
+const CenteredFormPaper = styled(Paper, {
+  shouldForwardProp: (prop) => prop !== "isSmallScreen",
+})(({ isSmallScreen }: CenteredFormPaperProps) => ({
+  width: isSmallScreen ? "80%" : "30%",
   position: "relative",
   margin: "0 auto",
   top: "10%",
-});
+}));
 
 const AuthPage = () => {
   const [authType, setAuthType] = useState<AuthType>("login");
+  const theme: Theme = useTheme();
+  const isSmallScreen: boolean = useMediaQuery(theme.breakpoints.down("md"));
 
   const goToAuthType = (type: AuthType) => {
     setAuthType(type);
@@ -23,7 +38,7 @@ const AuthPage = () => {
 
   return (
     <TwoColorBackground>
-      <CenteredFormPaper elevation={3}>
+      <CenteredFormPaper elevation={3} isSmallScreen={isSmallScreen}>
         <Typography variant={"h4"} paddingTop={3}>
           Welcome
         </Typography>
