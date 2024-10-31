@@ -9,10 +9,19 @@ import {
 } from "@mui/material";
 import CarIcon from "../../assets/caricon.png";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts";
+import { useEffect, useState } from "react";
+import UserInfoAvatar from "../UserInfo";
 
 const TopNav = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { user, checkSession } = useAuth();
+  const [isLogged, setIsLogged] = useState<boolean>(false);
+
+  useEffect(() => {
+    checkSession().then((isLogged) => setIsLogged(isLogged));
+  }, [checkSession]);
 
   return (
     <AppBar>
@@ -22,13 +31,17 @@ const TopNav = () => {
         </IconButton>
         <Typography variant={"h3"}>MechanIQ</Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <Button
-          color="inherit"
-          sx={{ border: "1px solid  #ffffff" }}
-          onClick={() => navigate("/login")}
-        >
-          Login
-        </Button>
+        {isLogged ? (
+          <UserInfoAvatar user={user} />
+        ) : (
+          <Button
+            color="inherit"
+            sx={{ border: "1px solid  #ffffff" }}
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </Button>
+        )}
       </Toolbar>
       <Box
         sx={{ height: "4px", backgroundColor: theme.extraColors.detail }}

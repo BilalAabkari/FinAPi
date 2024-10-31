@@ -55,6 +55,12 @@ public class UserController {
         return userService.findAuthenticatedUser(loginRequest.getUsername(), loginRequest.getUsername());
     }
 
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        SecurityContextHolder.clearContext();
+    }
+
     @GetMapping("/auth")
     public User auth() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

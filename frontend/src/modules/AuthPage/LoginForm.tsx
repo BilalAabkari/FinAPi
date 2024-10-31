@@ -10,11 +10,13 @@ import {
 import { AuthFormsProps } from "./AuthFormsInterfaces.tsx";
 import { useAuth } from "../../contexts";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ goToAuthType }: AuthFormsProps) => {
   const theme: Theme = useTheme();
   const formMethods = useForm();
   const authContext = useAuth();
+  const navigate = useNavigate();
   const [error, setError] = useState<boolean>(false);
 
   const identifier = formMethods.watch("identifier");
@@ -35,6 +37,7 @@ const LoginForm = ({ goToAuthType }: AuthFormsProps) => {
         if (success) {
           setError(false);
           formMethods.clearErrors();
+          navigate("/");
         } else {
           setError(true);
           formMethods.setError("identifier", { type: "custom" });

@@ -21,6 +21,16 @@ class UsersApiService extends BaseApi {
       throw new Error("API call error");
     }
   };
+
+  checkSession = async (): Promise<UserInfo | Response> => {
+    const response = await this.get(`${this.resourceUrl}/auth`);
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      throw new Error("API call error");
+    }
+  };
 }
 
 const UsersApi = new UsersApiService();

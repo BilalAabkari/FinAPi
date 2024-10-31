@@ -1,3 +1,5 @@
 import UsersApi from "./UsersApi.tsx";
+import { UserInfo } from "./types/UserTypes.tsx";
 
-export default UsersApi;
+export { UsersApi };
+export type { UserInfo };

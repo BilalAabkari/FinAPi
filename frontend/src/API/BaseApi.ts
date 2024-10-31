@@ -11,8 +11,19 @@ class BaseApi {
     return fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
+      credentials: "include",
       headers: {
-        "Content-Type": "application/json", // Ensure the correct content type is set
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+  get = (url: string) => {
+    return fetch(url, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
       },
     });
   };
