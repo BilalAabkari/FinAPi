@@ -1,6 +1,5 @@
 package com.mechanIQ.user.adapters;
 
-import com.mechanIQ.user.application.CustomUserDetailsService;
 import com.mechanIQ.user.application.UserService;
 import com.mechanIQ.user.domain.User;
 import com.mechanIQ.user.dto.LoginRequest;
@@ -36,8 +35,20 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public User signupUser(@RequestBody SignupRequest signupRequest) {
-        return this.userService.signup(signupRequest);
+    public User signupUser(@RequestBody SignupRequest signupRequest, HttpServletRequest request, HttpServletResponse response) {
+        User user = this.userService.signup(signupRequest);
+
+        UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
+                signupRequest.getUsername(),
+                signupRequest.getPassword());
+
+        Authentication authentication = authenticationManager.authenticate(token);
+        SecurityContext context = securityContextHolderStrategy.createEmptyContext();
+        context.setAuthentication(authentication);
+        securityContextHolderStrategy.setContext(context);
+        securityContextRepository.saveContext(context, request, response);
+
+        return user;
     }
 
     @PostMapping("/login")

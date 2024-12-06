@@ -4,6 +4,7 @@ import com.mechanIQ.user.adapters.JPAUserRepository;
 import com.mechanIQ.user.domain.User;
 import com.mechanIQ.user.dto.SignupRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,10 @@ public class UserService {
 
     public User signup(SignupRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("User already exists.");
+            throw new DataIntegrityViolationException("User already exists.");
+        }
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new DataIntegrityViolationException("User already exists.");
         }
         User user = new User();
         user.setEmail(request.getEmail());

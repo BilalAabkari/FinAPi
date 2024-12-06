@@ -22,9 +22,9 @@ interface AuthProviderProps {
 const defaultAuthContext: AuthContextType = {
   user: null,
   isLogged: () => false,
-  setUser: () => {}, // placeholder
-  login: async () => false, // placeholder
-  checkSession: async () => false, // placeholder
+  setUser: () => {},
+  login: async () => false,
+  checkSession: async () => false,
 };
 
 const AuthContext = createContext<AuthContextType>(defaultAuthContext);

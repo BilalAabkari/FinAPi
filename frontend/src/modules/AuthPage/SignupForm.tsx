@@ -1,22 +1,76 @@
-import { Button, Grid, Link, useMediaQuery, useTheme } from "@mui/material";
-import { EmailInput, PasswordField } from "../../components/FormInputs";
+import {
+  Button,
+  Grid,
+  Link,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import {
+  EmailInput,
+  PasswordField,
+  TextInput,
+} from "../../components/FormInputs";
 import { Theme } from "@mui/material/styles";
-import { FormProvider, useForm } from "react-hook-form";
+import {
+  FieldValues,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import { AuthFormsProps } from "./AuthFormsInterfaces.tsx";
+import { UsersApi } from "../../API";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const SignupForm = ({ goToAuthType }: AuthFormsProps) => {
   const theme: Theme = useTheme();
   const isSmallScreen: boolean = useMediaQuery(theme.breakpoints.down("sm"));
   const formMethods = useForm();
+  const navigate = useNavigate();
+
+  const [signupError, setSignupError] = useState<boolean>(false);
+  const [signupMessage, setSignupMessage] = useState<string>("");
+
+  const signupHandler: SubmitHandler<FieldValues> = (data) => {
+    formMethods.clearErrors();
+
+    UsersApi.signup({
+      name: data.name,
+      username: data.username,
+      surname: data.surname,
+      email: data.email,
+      password: data.password,
+    }).then((response) => {
+      if (response.ok) {
+        navigate("/");
+      } else {
+        response.json().then((body) => {
+          setSignupMessage(body.details);
+          setSignupError(true);
+        });
+      }
+    });
+  };
 
   return (
     <FormProvider {...formMethods}>
       <Grid container spacing={3}>
-        <Grid item xs={isSmallScreen ? 12 : 6}>
-          <EmailInput innerLabel={"Name"} name={"name"} />
+        <Grid item xs={12}>
+          {signupError && (
+            <Typography textAlign={"start"} paddingBottom={1} color={"error"}>
+              {signupMessage}
+            </Typography>
+          )}
         </Grid>
         <Grid item xs={isSmallScreen ? 12 : 6}>
-          <EmailInput innerLabel={"Surname"} name={"surname"} />
+          <TextInput innerLabel={"Name"} name={"name"} />
+        </Grid>
+        <Grid item xs={isSmallScreen ? 12 : 6}>
+          <TextInput innerLabel={"Surname"} name={"surname"} />
+        </Grid>
+        <Grid item xs={12}>
+          <TextInput innerLabel={"Username"} name={"username"} />
         </Grid>
         <Grid item xs={12}>
           <EmailInput innerLabel={"Email address"} name={"email"} />
@@ -40,6 +94,7 @@ const SignupForm = ({ goToAuthType }: AuthFormsProps) => {
               borderStyle: "solid",
               borderWidth: 1,
             }}
+            onClick={formMethods.handleSubmit(signupHandler)}
           >
             SignUp
           </Button>

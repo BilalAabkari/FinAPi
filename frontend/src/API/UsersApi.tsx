@@ -22,6 +22,10 @@ class UsersApiService extends BaseApi {
     }
   };
 
+  signup = async (body: UserTypes.SignupRequest): Promise<Response> => {
+    return await this.post(`${this.resourceUrl}/signup`, body);
+  };
+
   checkSession = async (): Promise<UserInfo | Response> => {
     const response = await this.get(`${this.resourceUrl}/auth`);
 
