@@ -38,33 +38,17 @@ public class UserController {
     public User signupUser(@RequestBody SignupRequest signupRequest, HttpServletRequest request, HttpServletResponse response) {
         User user = this.userService.signup(signupRequest);
 
-        UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
-                signupRequest.getUsername(),
-                signupRequest.getPassword());
-
-        Authentication authentication = authenticationManager.authenticate(token);
-        SecurityContext context = securityContextHolderStrategy.createEmptyContext();
-        context.setAuthentication(authentication);
-        securityContextHolderStrategy.setContext(context);
-        securityContextRepository.saveContext(context, request, response);
-
+        login(request, response, signupRequest.getUsername(), signupRequest.getPassword());
         return user;
     }
 
     @PostMapping("/login")
     public User login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
 
-        UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
-                loginRequest.getUsername(),
-                loginRequest.getPassword());
-
-        Authentication authentication = authenticationManager.authenticate(token);
-        SecurityContext context = securityContextHolderStrategy.createEmptyContext();
-        context.setAuthentication(authentication);
-        securityContextHolderStrategy.setContext(context);
-        securityContextRepository.saveContext(context, request, response);
+        login(request, response, loginRequest.getUsername(), loginRequest.getPassword());
         return userService.findAuthenticatedUser(loginRequest.getUsername(), loginRequest.getUsername());
     }
+
 
     @PostMapping("/logout")
     public void logout(HttpServletRequest request) {
@@ -82,5 +66,17 @@ public class UserController {
 
         }
         throw new RuntimeException("User is not authenticated");
+    }
+
+    private void login(HttpServletRequest request, HttpServletResponse response, String username, String password) {
+        UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
+                username,
+                password);
+
+        Authentication authentication = authenticationManager.authenticate(token);
+        SecurityContext context = securityContextHolderStrategy.createEmptyContext();
+        context.setAuthentication(authentication);
+        securityContextHolderStrategy.setContext(context);
+        securityContextRepository.saveContext(context, request, response);
     }
 }

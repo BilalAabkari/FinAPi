@@ -10,7 +10,7 @@ class BaseApi {
   post = <T>(url: string, body: T) => {
     return fetch(url, {
       method: "POST",
-      body: JSON.stringify(body),
+      body: JSON.stringify(body) ?? undefined,
       credentials: "include",
       headers: {
         "Content-Type": "application/json",

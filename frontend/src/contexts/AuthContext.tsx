@@ -13,6 +13,7 @@ interface AuthContextType {
   isLogged: () => boolean;
   setUser: React.Dispatch<React.SetStateAction<UserInfo | null>>;
   login: (props: LoginRequest) => Promise<boolean>;
+  logout: (() => Promise<Response>) | undefined;
   checkSession: () => Promise<boolean>;
 }
 interface AuthProviderProps {
@@ -25,6 +26,7 @@ const defaultAuthContext: AuthContextType = {
   setUser: () => {},
   login: async () => false,
   checkSession: async () => false,
+  logout: undefined,
 };
 
 const AuthContext = createContext<AuthContextType>(defaultAuthContext);
@@ -48,6 +50,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const logout = async (): Promise<Response> => {
+    const response = await UsersApi.logout();
+    if (response.ok) {
+      setUser(null);
+      return response;
+    } else {
+      const body = await response.json();
+      console.error(body);
+      return response;
+    }
+  };
+
   const checkSession = useCallback(async (): Promise<boolean> => {
     try {
       const result = await UsersApi.checkSession();
@@ -62,7 +76,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, isLogged, login, checkSession }}
+      value={{ user, setUser, isLogged, login, logout, checkSession }}
     >
       {children}
     </AuthContext.Provider>
