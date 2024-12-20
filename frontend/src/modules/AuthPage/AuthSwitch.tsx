@@ -40,7 +40,7 @@ const AuthSwitch = ({ authType, onChange }: AuthSwitchProps) => {
         }}
         onClick={() => onChange("login")}
       >
-        <Typography variant={"body1"} paddingTop={1}>
+        <Typography variant={"body1"} paddingTop={1} textAlign={"center"}>
           Login
         </Typography>
       </Label>
@@ -51,7 +51,7 @@ const AuthSwitch = ({ authType, onChange }: AuthSwitchProps) => {
         }}
         onClick={() => onChange("signup")}
       >
-        <Typography variant={"body1"} paddingTop={1}>
+        <Typography variant={"body1"} paddingTop={1} textAlign={"center"}>
           Signup
         </Typography>
       </Label>

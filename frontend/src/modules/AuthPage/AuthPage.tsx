@@ -39,7 +39,7 @@ const AuthPage = () => {
   return (
     <TwoColorBackground>
       <CenteredFormPaper elevation={3} isSmallScreen={isSmallScreen}>
-        <Typography variant={"h4"} paddingTop={3}>
+        <Typography variant={"h4"} paddingTop={3} textAlign={"center"}>
           Welcome
         </Typography>
         <Box sx={{ width: "60%", height: 40, margin: "0 auto", paddingTop: 4 }}>

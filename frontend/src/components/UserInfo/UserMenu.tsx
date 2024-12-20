@@ -5,12 +5,14 @@ import {
   Paper,
   styled,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { UserInfo } from "../../API";
 import { forwardRef, MouseEventHandler } from "react";
 import BrokenImage from "../../assets/broken-image.png";
 import { useAuth } from "../../contexts";
+import { useNavigate } from "react-router-dom";
 
 interface UserMenuProps {
   show: boolean;
@@ -18,12 +20,18 @@ interface UserMenuProps {
   ref: HTMLDivElement | null;
 }
 
-const StyledPaper = styled(Paper)({
+interface StyledPaperProps {
+  isMobile: boolean;
+}
+
+const StyledPaper = styled(Paper, {
+  shouldForwardProp: (prop) => prop !== "isMobile",
+})(({ isMobile }: StyledPaperProps) => ({
   position: "absolute",
-  width: "260px",
+  width: isMobile ? "92vw" : "260px",
   right: 0,
   height: "400px",
-});
+}));
 
 type Option = {
   text: string;
@@ -33,8 +41,9 @@ type Option = {
 const UserMenu = forwardRef<HTMLDivElement, UserMenuProps>(
   ({ user, show }, ref) => {
     const { logout } = useAuth();
-
     const theme = useTheme();
+    const navigate = useNavigate();
+
     const options: Option[] = [
       {
         text: "Logout",
@@ -44,12 +53,18 @@ const UserMenu = forwardRef<HTMLDivElement, UserMenuProps>(
             if (response.ok) window.location.reload();
           }),
       },
+      {
+        text: "Management",
+        onClick: () => navigate("/management"),
+      },
     ];
+
+    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
     return (
       user &&
       show && (
-        <StyledPaper ref={ref} elevation={3}>
+        <StyledPaper isMobile={isMobile} ref={ref} elevation={3}>
           <Avatar
             src={BrokenImage}
             sx={{
@@ -63,10 +78,12 @@ const UserMenu = forwardRef<HTMLDivElement, UserMenuProps>(
             color={theme.extraColors.detail}
             sx={{ marginTop: 2, height: "1px" }}
           ></Divider>
-          <Typography variant={"h6"} marginTop={0}>
+          <Typography variant={"h6"} marginTop={0} textAlign={"center"}>
             {user.username}
           </Typography>
-          <Typography variant={"body2"}>{user.email}</Typography>
+          <Typography variant={"body2"} textAlign={"center"}>
+            {user.email}
+          </Typography>
           <Divider
             color={theme.extraColors.detail}
             sx={{ marginTop: 1, height: "1px" }}

@@ -14,9 +14,15 @@ const UserInfoAvatar = ({ user }: UserInfoProps) => {
   const theme: Theme = useTheme();
 
   const paperRef = useRef<HTMLDivElement | null>(null);
+  const avatarRef = useRef<HTMLDivElement | null>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (paperRef.current && !paperRef.current.contains(event.target as Node)) {
+    if (
+      paperRef.current &&
+      avatarRef.current &&
+      !paperRef.current.contains(event.target as Node) &&
+      !avatarRef.current.contains(event.target as Node)
+    ) {
       setUserMenuOpen(false);
     }
   };
@@ -37,6 +43,7 @@ const UserInfoAvatar = ({ user }: UserInfoProps) => {
         onClick={() => setUserMenuOpen(!userMenuOpen)}
       >
         <Avatar
+          ref={avatarRef}
           src={BrokenImage}
           sx={{
             borderColor: theme.extraColors.detail,

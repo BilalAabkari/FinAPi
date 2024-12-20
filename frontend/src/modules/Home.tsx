@@ -1,8 +1,6 @@
-import TopNav from "../components/TopNav";
+import { TopNav } from "../components/TopNav";
 
 function Home() {
-
-
   return <TopNav />;
 }
 

@@ -1,3 +1,4 @@
 import TopNav from "./TopNav.tsx";
+import DwarfTopNav from "./DwarfTopNav.tsx";
 
-export default TopNav;
+export { TopNav, DwarfTopNav };

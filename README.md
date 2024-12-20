@@ -56,7 +56,7 @@ to run or rerun:
 
 In windows powershell:
 ```
-docker-compose -f ../docker-compose-remote-spring-boot.yaml restart backend ; docker-compose -f ../docker-compose-remote-spring-boot.yaml logs -f backend
+docker-compose restart backend
 ```
 
 in linux:

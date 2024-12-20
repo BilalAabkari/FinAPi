@@ -5,6 +5,7 @@ import {
   IconButton,
   Toolbar,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import CarIcon from "../../assets/caricon.png";
@@ -19,6 +20,8 @@ const TopNav = () => {
   const { user, checkSession } = useAuth();
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   useEffect(() => {
     checkSession().then((isLogged) => setIsLogged(isLogged));
   }, [checkSession]);
@@ -26,10 +29,23 @@ const TopNav = () => {
   return (
     <AppBar>
       <Toolbar>
-        <IconButton>
-          <img src={CarIcon} alt="My Custom Icon" style={{ height: "100px" }} />
+        <IconButton
+          onClick={() => navigate("/")}
+          sx={{
+            "&:focus": {
+              outline: "none",
+            },
+          }}
+        >
+          <img
+            src={CarIcon}
+            alt="My Custom Icon"
+            style={{ height: isMobile ? "40px" : "100px" }}
+          />
         </IconButton>
-        <Typography variant={"h3"}>MechanIQ</Typography>
+        <Typography variant={"h3"} fontSize={isMobile ? "30px" : "40px"}>
+          MechanIQ
+        </Typography>
         <Box sx={{ flexGrow: 1 }} />
         {isLogged ? (
           <UserInfoAvatar user={user} />
