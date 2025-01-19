@@ -63,6 +63,16 @@ const theme = createTheme({
         },
       },
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          "&:focus": {
+            outline: "none",
+          },
+        },
+      },
+    },
   },
 });
 

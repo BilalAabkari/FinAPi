@@ -1,6 +1,7 @@
 import { Box, Button, styled, useTheme } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { useState } from "react";
+import { MENU_ITEMS } from "./constants.ts";
 
 const StyledBox = styled(Box)({
   height: "100%",
@@ -30,7 +31,11 @@ interface MenuOptionProps {
   text: string;
 }
 
-const ManagementMenu = () => {
+interface ManagementMenuProps {
+  onChange: (option: MenuOptionProps) => void;
+}
+
+const ManagementMenu = ({ onChange }: ManagementMenuProps) => {
   const theme: Theme = useTheme();
 
   const [selectedOption, setSelectedOption] = useState<MenuOptionProps | null>(
@@ -39,12 +44,12 @@ const ManagementMenu = () => {
 
   const options: MenuOptionProps[] = [
     {
-      id: 1,
-      text: "BRANDS AND MODELS",
+      id: MENU_ITEMS.MANAGE_TRACKING_ITEMS,
+      text: "MANAGE TRACKING ITEMS",
     },
     {
       id: 2,
-      text: "SCHEMES",
+      text: "STATISTICS",
     },
   ];
 
@@ -57,11 +62,12 @@ const ManagementMenu = () => {
             backgroundColor={
               option.id === selectedOption?.id ? "#bababa" : "#ffffff"
             }
-            onClick={() =>
+            onClick={() => {
+              onChange(option);
               setSelectedOption(
                 selectedOption?.id === option.id ? null : option,
-              )
-            }
+              );
+            }}
           >
             {option.text}
           </MenuOption>

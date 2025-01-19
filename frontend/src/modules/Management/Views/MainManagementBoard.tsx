@@ -1,9 +1,15 @@
 import { Box, useTheme } from "@mui/material";
 import { DwarfTopNav } from "../../../components/TopNav";
 import { ManagementMenu } from "../Components";
+import { useState } from "react";
+import { MENU_ITEMS } from "../Components/constants.ts";
+import TrackingItemsList from "./TrackingItemsList.tsx";
 
 const MainManagementBoard = () => {
   const theme = useTheme();
+  const [selectedOption, setSelectedOption] = useState<number>(
+    MENU_ITEMS.MANAGE_TRACKING_ITEMS,
+  );
 
   return (
     <>
@@ -17,7 +23,10 @@ const MainManagementBoard = () => {
           display: "flex",
         }}
       >
-        <ManagementMenu />
+        <ManagementMenu onChange={(option) => setSelectedOption(option.id)} />
+        {selectedOption === MENU_ITEMS.MANAGE_TRACKING_ITEMS && (
+          <TrackingItemsList />
+        )}
       </Box>
     </>
   );
