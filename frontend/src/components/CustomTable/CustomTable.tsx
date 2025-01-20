@@ -1,10 +1,9 @@
 import { CustomTableProps } from "./Types.ts";
 import { flexRender } from "@tanstack/react-table";
 import { styled } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const StyledTable = styled("table")({
-  // width: "100%",
   color: "#4c4c4c",
   borderCollapse: "collapse",
   boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.3)",
@@ -70,12 +69,20 @@ const ResizeBar = styled("div")<TableSizeProp>(({ size }) => ({
   width: "1px",
   position: "absolute",
   top: 0,
-  left: -1,
+  right: 0,
   cursor: "ew-resize",
   height: size.height,
 }));
 
-const CustomTable = <T,>({ table }: CustomTableProps<T>) => {
+interface DraggingResizeEvent {
+  draggingItem: string;
+  initialWidth: number;
+  initialMouseX: number;
+}
+
+const MIN_WIDTH = 5;
+
+const CustomTable = <T,>({ table, columnsResizable }: CustomTableProps<T>) => {
   const tableRef = useRef<HTMLTableElement | null>(null);
   const [widths, setWidths] = useState(
     table
@@ -86,54 +93,47 @@ const CustomTable = <T,>({ table }: CustomTableProps<T>) => {
       })),
   );
 
-  const getWidth = (headerId) => {
+  const getWidth = (headerId: string) => {
     return widths.find((widthItem) => widthItem.id === headerId);
   };
 
-  const draggingId = useRef<undefined | number>(undefined);
-  const initialMouseX = useRef(0);
-  const initialWidth = useRef<undefined | number>(undefined);
-  const initialWidthAfter = useRef<undefined | number>(undefined);
-  const initialWidthBefore = useRef<undefined | number>(undefined);
+  const draggingEvent = useRef<DraggingResizeEvent | undefined>(undefined);
 
   const [tableSize, setSize] = useState({ width: 0, height: 0 });
 
-  const dragStarted = (id, event) => {
+  const dragStarted = (id: string, event: React.MouseEvent) => {
+    event.preventDefault();
+    document.addEventListener("mousemove", handleDrag);
+    document.addEventListener("mouseup", release);
+
     const index = widths.findIndex((elem) => elem.id === id.toString());
 
-    initialWidth.current = widths[index].width;
-    initialWidthAfter.current = widths[index + 1]?.width;
-    initialWidthBefore.current = widths[index - 1]?.width;
-    draggingId.current = id;
-    initialMouseX.current = event.clientX;
+    draggingEvent.current = {
+      initialWidth: widths[index].width ?? 0,
+      draggingItem: id,
+      initialMouseX: event.clientX,
+    };
   };
 
-  const handleDrag = (event) => {
-    if (draggingId.current) {
-      const deltaX = event.clientX - initialMouseX.current;
+  const handleDrag = (event: MouseEvent) => {
+    if (draggingEvent.current) {
+      const deltaX = event.clientX - draggingEvent.current.initialMouseX;
 
       const widthListCopy = [...widths];
 
       const index = widthListCopy.findIndex(
-        (elem) => elem.id === draggingId.current.toString(),
+        (elem) => elem.id === draggingEvent.current?.draggingItem,
       );
-      widthListCopy[index].width = initialWidth.current - deltaX;
-      if (widthListCopy[index + 1])
-        widthListCopy[index + 1].width = initialWidthAfter.current + deltaX;
-      if (widthListCopy[index - 1])
-        widthListCopy[index - 1].width = initialWidthBefore.current + deltaX;
-      setWidths([...widthListCopy]);
 
-      console.log(deltaX);
+      widthListCopy[index].width = draggingEvent.current.initialWidth + deltaX;
+      if (widthListCopy[index].width > MIN_WIDTH) setWidths([...widthListCopy]);
     }
   };
 
   const release = () => {
-    initialWidth.current = undefined;
-    initialWidthAfter.current = undefined;
-    initialWidthBefore.current = undefined;
-    draggingId.current = undefined;
-    initialMouseX.current = 0;
+    document.removeEventListener("mousemove", handleDrag);
+    document.removeEventListener("mouseup", release);
+    draggingEvent.current = undefined;
   };
 
   useEffect(() => {
@@ -148,34 +148,25 @@ const CustomTable = <T,>({ table }: CustomTableProps<T>) => {
       <StyledHead>
         {table.getHeaderGroups().map((headerGroup) => (
           <StyledHeaderRow key={headerGroup.id}>
-            {headerGroup.headers.map(
-              (
-                header,
-                index, // map over the headerGroup headers array
-              ) => (
-                <HeaderCell
-                  key={header.id}
-                  colSpan={header.colSpan}
-                  width={getWidth(header.id)?.width}
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
-                  {index !== 0 && (
-                    <ResizeBar
-                      size={tableSize}
-                      onDragStart={(event) => dragStarted(header.id, event)}
-                      // onDragOver={(event) => console.log(event)}
-                      onDrag={(event) => handleDrag(event)}
-                      // onDragEnter={(event) => console.log(event)}
-                      onDragEnd={(event) => release(event)}
-                      draggable={true}
-                    />
-                  )}
-                </HeaderCell>
-              ),
-            )}
+            {headerGroup.headers.map((header) => (
+              <HeaderCell
+                key={header.id}
+                colSpan={header.colSpan}
+                width={getWidth(header.id)?.width}
+              >
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext(),
+                )}
+
+                {columnsResizable && (
+                  <ResizeBar
+                    size={tableSize}
+                    onMouseDown={(event) => dragStarted(header.id, event)}
+                  />
+                )}
+              </HeaderCell>
+            ))}
           </StyledHeaderRow>
         ))}
       </StyledHead>

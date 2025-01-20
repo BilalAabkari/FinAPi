@@ -11,6 +11,8 @@ interface TrackingItemTBL {
   id: number;
   name: string;
   identifier: string;
+  category: string;
+  type: string;
   description: string;
 }
 
@@ -24,17 +26,23 @@ const TrackingItemsList = () => {
       id: 1,
       name: "test1",
       identifier: "asda",
+      type: "income",
+      category: "Shoes sells",
       description: "asdas asjdasjk ashd jkahj",
     },
     {
       id: 2,
       name: "test2",
+      type: "income",
       identifier: "asda",
+      category: "subscription A",
       description: "asdas asjdasjk ashd jkahj",
     },
     {
       id: 3,
       name: "test3",
+      type: "expense",
+      category: "Hosting",
       identifier: "asda",
       description: "asdas asjdasjk ashd jkahj",
     },
@@ -50,6 +58,18 @@ const TrackingItemsList = () => {
     columnHelper.accessor("identifier", {
       id: "identifier",
       header: "Identifier",
+    }),
+    columnHelper.accessor("type", {
+      id: "type",
+      header: "Type",
+    }),
+    columnHelper.accessor("category", {
+      id: "category",
+      header: "Category",
+    }),
+    columnHelper.accessor("description", {
+      id: "description",
+      header: "Description",
     }),
     columnHelper.display({
       id: "actions",
@@ -74,8 +94,8 @@ const TrackingItemsList = () => {
         Your tracking items
       </Typography>
       <Divider sx={{ width: "100%", marginBottom: 2 }}></Divider>
-      <Box sx={{ width: "40%" }}>
-        <CustomTable table={table} />
+      <Box sx={{ width: "80%" }}>
+        <CustomTable table={table} columnsResizable={true} />
       </Box>
     </Box>
   );
