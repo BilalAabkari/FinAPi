@@ -84,13 +84,12 @@ const MIN_WIDTH = 5;
 
 const CustomTable = <T,>({ table, columnsResizable }: CustomTableProps<T>) => {
   const tableRef = useRef<HTMLTableElement | null>(null);
+  const lastHeaderGroupIndex = table.getHeaderGroups().length - 1;
   const [widths, setWidths] = useState(
-    table
-      .getHeaderGroups()
-      [table.getHeaderGroups().length - 1].headers.map((header) => ({
-        id: header.id,
-        width: header.column.columnDef.size,
-      })),
+    table.getHeaderGroups()[lastHeaderGroupIndex].headers.map((header) => ({
+      id: header.id,
+      width: header.column.columnDef.size,
+    })),
   );
 
   const getWidth = (headerId: string) => {
