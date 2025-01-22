@@ -3,13 +3,17 @@ import { Button } from "@mui/material";
 
 interface CreateTrackingItemModalProps {
   open: boolean;
+  onClose: () => void;
 }
 
-const CreateTrackingItemModal = ({ open }: CreateTrackingItemModalProps) => {
+const CreateTrackingItemModal = ({
+  open,
+  onClose,
+}: CreateTrackingItemModalProps) => {
   return (
     <CustomModal open={open}>
       <ModalHeader title={"Create new tracking item"}>
-        <Button>Save</Button>
+        <Button onClick={onClose}>Save</Button>
       </ModalHeader>
     </CustomModal>
   );

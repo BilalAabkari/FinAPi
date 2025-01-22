@@ -6,15 +6,15 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { CustomTable } from "../../../components/CustomTable";
+import { useEffect, useState } from "react";
+import CreateTrackingItemModal from "./CreateTrackingItemModal.tsx";
+import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
-import CreateTrackingItemModal from "./CreateTrackingItemModal.tsx";
-import { useEffect, useState } from "react";
+import { CustomTable } from "../../../components/CustomTable";
 
 interface TrackingItemTBL {
   id: number;
@@ -27,40 +27,42 @@ interface TrackingItemTBL {
 
 const TrackingItemsList = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [data, setData] = useState<TrackingItemTBL[]>([]);
 
   const showMoreDetails = (item: TrackingItemTBL) => {
     console.log(item);
   };
+
   const theme = useTheme();
 
-  const data: TrackingItemTBL[] = [
-    {
-      id: 1,
-      name: "test1",
-      identifier: "asda",
-      type: "income",
-      category: "Shoes sells",
-      description: "asdas asjdasjk ashd jkahj",
-    },
-    {
-      id: 2,
-      name: "test2",
-      type: "income",
-      identifier: "asda",
-      category: "subscription A",
-      description: "asdas asjdasjk ashd jkahj",
-    },
-    {
-      id: 3,
-      name: "test3",
-      type: "expense",
-      category: "Hosting",
-      identifier: "asda",
-      description: "asdas asjdasjk ashd jkahj",
-    },
-  ];
-
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setData([
+      {
+        id: 1,
+        name: "test1",
+        identifier: "asda",
+        type: "income",
+        category: "Shoes sells",
+        description: "asdas asjdasjk ashd jkahj",
+      },
+      {
+        id: 2,
+        name: "test2",
+        type: "income",
+        identifier: "asda",
+        category: "subscription A",
+        description: "asdas asjdasjk ashd jkahj",
+      },
+      {
+        id: 3,
+        name: "test3",
+        type: "expense",
+        category: "Hosting",
+        identifier: "asda",
+        description: "asdas asjdasjk ashd jkahj",
+      },
+    ]);
+  }, []);
 
   const columnHelper = createColumnHelper<TrackingItemTBL>();
 
@@ -125,7 +127,12 @@ const TrackingItemsList = () => {
       <Box sx={{ width: "80%" }}>
         <CustomTable table={table} columnsResizable={true} />
       </Box>
-      {/*<CreateTrackingItemModal open={openModal} /> */}
+      {
+        <CreateTrackingItemModal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+        />
+      }
     </Box>
   );
 };
