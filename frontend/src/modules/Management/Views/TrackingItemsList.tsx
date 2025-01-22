@@ -1,4 +1,11 @@
-import { Box, Divider, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { CustomTable } from "../../../components/CustomTable";
 import {
   createColumnHelper,
@@ -6,6 +13,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
+import CreateTrackingItemModal from "./CreateTrackingItemModal.tsx";
+import { useEffect, useState } from "react";
 
 interface TrackingItemTBL {
   id: number;
@@ -17,9 +26,12 @@ interface TrackingItemTBL {
 }
 
 const TrackingItemsList = () => {
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
   const showMoreDetails = (item: TrackingItemTBL) => {
     console.log(item);
   };
+  const theme = useTheme();
 
   const data: TrackingItemTBL[] = [
     {
@@ -47,6 +59,8 @@ const TrackingItemsList = () => {
       description: "asdas asjdasjk ashd jkahj",
     },
   ];
+
+  useEffect(() => {}, []);
 
   const columnHelper = createColumnHelper<TrackingItemTBL>();
 
@@ -94,9 +108,24 @@ const TrackingItemsList = () => {
         Your tracking items
       </Typography>
       <Divider sx={{ width: "100%", marginBottom: 2 }}></Divider>
+      <Box sx={{ paddingBottom: 2 }}>
+        <Button
+          sx={{
+            backgroundColor: theme.extraColors.detail,
+            color: theme.palette.text.primary,
+          }}
+          onClick={() => {
+            console.log("Clicking");
+            setOpenModal(true);
+          }}
+        >
+          Add new item
+        </Button>
+      </Box>
       <Box sx={{ width: "80%" }}>
         <CustomTable table={table} columnsResizable={true} />
       </Box>
+      {/*<CreateTrackingItemModal open={openModal} /> */}
     </Box>
   );
 };
