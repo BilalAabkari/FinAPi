@@ -11,12 +11,13 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
-import { FormProvider, useForm } from "react-hook-form";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { TextInput } from "../../../components/FormInputs";
 import AddIcon from "@mui/icons-material/Add";
 import theme from "../../../utils/theme.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FIELD_TYPES, FIELD_TYPES_NAMES } from "../../../utils/constants.ts";
+import { DeleteRounded } from "@mui/icons-material";
 
 interface CreateTrackingItemModalProps {
     open: boolean;
@@ -27,6 +28,7 @@ interface TrackingItemField {
     id: string;
     name?: string;
     type?: number;
+    deleted?: 0;
 }
 
 let TMP_ID = 0;
@@ -46,16 +48,49 @@ const CreateTrackingItemModal = ({
             id: TMP_ID.toString(),
             name: undefined,
             type: undefined,
+            deleted: 0,
         });
         TMP_ID++;
 
         setFields(fieldsCopy);
     };
 
+    const deleteField = (field: TrackingItemField) => {
+        const index = fields.findIndex((f) => f.id === field.id);
+        if (index >= 0) {
+            setFields([...fields.slice(0, index), ...fields.slice(index + 1)]);
+            formMethods.setValue(`fields.${field.id}.deleted`, 1);
+        }
+    };
+
+    const create = (data: FieldValues) => {
+        const body = {
+            category: data.category,
+            description: data.description,
+            identifier: data.identifier,
+            name: data.name,
+            type: data.type,
+            fields: data.fields.filter((d: TrackingItemField) => !d.deleted),
+        };
+        console.log(body);
+    };
+
+    useEffect(() => {
+        if (!open) {
+            formMethods.reset();
+            setFields([]);
+        } else {
+            onAddField();
+        }
+    }, [open]);
+
     return (
         <CustomModal open={open} paperSxProps={{ width: "50%" }}>
             <ModalHeader title={"Create new tracking item"}>
                 <Button onClick={onClose}>Close</Button>
+                <Button onClick={formMethods.handleSubmit(create)}>
+                    Create
+                </Button>
             </ModalHeader>
             <ModalContent>
                 <Box sx={{ padding: 3 }}>
@@ -86,7 +121,6 @@ const CreateTrackingItemModal = ({
                                 <TextInput
                                     innerLabel="Type"
                                     name="type"
-                                    required
                                     size="small"
                                     fullWidth
                                 />
@@ -105,7 +139,6 @@ const CreateTrackingItemModal = ({
                                     innerLabel="Description"
                                     name="description"
                                     multiline={true}
-                                    required
                                     fullWidth
                                 />
                             </Grid>
@@ -123,39 +156,40 @@ const CreateTrackingItemModal = ({
                                 >
                                     <TextInput
                                         innerLabel="Name"
-                                        name={`${field.id}.name`}
+                                        name={`fields.${field.id}.name`}
                                         variant="standard"
+                                        required
                                         fullWidth
                                     />
                                     <TextInput
                                         innerLabel="Type"
-                                        name={`${field.id}.type`}
+                                        name={`fields.${field.id}.type`}
                                         variant="standard"
                                         fullWidth
+                                        required
                                         select
                                     >
-                                        <option key="empty"></option>
-                                        {Object.keys(FIELD_TYPES).map(
-                                            (fieldType) => (
-                                                <option
-                                                    key={fieldType}
-                                                    value={
-                                                        FIELD_TYPES[
-                                                            fieldType as keyof typeof FIELD_TYPES
-                                                        ]
-                                                    }
-                                                >
-                                                    {
-                                                        FIELD_TYPES_NAMES[
-                                                            FIELD_TYPES[
-                                                                fieldType as keyof typeof FIELD_TYPES
-                                                            ]
-                                                        ]
-                                                    }
+                                        <option
+                                            key="empty"
+                                            value=""
+                                            disabled
+                                        ></option>
+                                        {Object.entries(FIELD_TYPES).map(
+                                            ([key, value]) => (
+                                                <option key={key} value={value}>
+                                                    {FIELD_TYPES_NAMES[value]}
                                                 </option>
                                             ),
                                         )}
                                     </TextInput>
+                                    <IconButton
+                                        sx={{ paddingBottom: 0 }}
+                                        onClick={() => deleteField(field)}
+                                    >
+                                        <DeleteRounded
+                                            sx={{ color: "#e83838" }}
+                                        />
+                                    </IconButton>
                                 </Stack>
                             ))}
                         </Stack>

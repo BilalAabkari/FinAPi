@@ -25,7 +25,12 @@ const TextInput = ({
                 name={name}
                 control={control}
                 defaultValue=""
-                render={({ field }) => (
+                rules={{
+                    required: required
+                        ? `${innerLabel || label} is required`
+                        : false,
+                }}
+                render={({ field, fieldState }) => (
                     <TextField
                         {...field}
                         required={required}
@@ -36,6 +41,7 @@ const TextInput = ({
                         variant={variant}
                         size={size}
                         select={select}
+                        error={!!fieldState.error}
                         slotProps={{
                             select: {
                                 native: true,
