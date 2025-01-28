@@ -2,9 +2,11 @@ package com.mechanIQ.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mechanIQ.role.domain.Role;
+import com.mechanIQ.trackingItem.domain.TrackingItem;
 import jakarta.persistence.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,6 +39,9 @@ public class User {
             joinColumns = @JoinColumn(name = "tbl_user_id"),
             inverseJoinColumns = @JoinColumn(name = "tbl_role_id"))
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user")
+    private List<TrackingItem> trackingItems;
 
     public Long getId() {
         return id;
@@ -91,5 +96,9 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<TrackingItem> getTrackingItems() {
+        return trackingItems;
     }
 }
