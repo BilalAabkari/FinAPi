@@ -3,6 +3,7 @@ package com.mechanIQ.user.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mechanIQ.common.base.BaseEntity;
 import com.mechanIQ.role.domain.Role;
+import com.mechanIQ.trackingItem.domain.TrackingItem;
 import jakarta.persistence.*;
 import org.springframework.transaction.annotation.Transactional;
 

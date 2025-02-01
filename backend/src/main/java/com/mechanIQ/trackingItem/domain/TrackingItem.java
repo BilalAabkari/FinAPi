@@ -2,6 +2,7 @@ package com.mechanIQ.trackingItem.domain;
 
 
 import com.mechanIQ.common.base.BaseEntity;
+import com.mechanIQ.trackingField.domain.TrackingField;
 import com.mechanIQ.user.domain.User;
 import jakarta.persistence.*;
 
@@ -10,6 +11,11 @@ import java.util.List;
 @Entity
 @Table(name = "tbl_tracking_item")
 public class TrackingItem extends BaseEntity {
+
+    public enum Type {
+        EXPENSE,
+        INCOME,
+    }
 
     @Id
     @GeneratedValue
@@ -25,7 +31,7 @@ public class TrackingItem extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String identifier;
 
-    private com.mechanIQ.trackingItem.domain.TrackingItem.TYPE type;
+    private Type type;
 
     private String category;
 
@@ -52,7 +58,7 @@ public class TrackingItem extends BaseEntity {
         return user;
     }
 
-    public com.mechanIQ.trackingItem.domain.TrackingItem.TYPE getType() {
+    public Type getType() {
         return type;
     }
 
