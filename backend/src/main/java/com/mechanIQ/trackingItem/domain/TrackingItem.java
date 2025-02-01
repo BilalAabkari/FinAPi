@@ -1,14 +1,15 @@
 package com.mechanIQ.trackingItem.domain;
 
+
+import com.mechanIQ.common.base.BaseEntity;
 import com.mechanIQ.user.domain.User;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "tbl_tracking_item")
-public class TrackingItem {
-
-    public static final Integer INCOME = 0;
-    public static final Integer EXPENSE = 1;
+public class TrackingItem extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -24,11 +25,14 @@ public class TrackingItem {
     @Column(nullable = false, unique = true)
     private String identifier;
 
-    private Integer type;
+    private com.mechanIQ.trackingItem.domain.TrackingItem.TYPE type;
 
     private String category;
 
     private String description;
+
+    @OneToMany(mappedBy = "trackingItem", cascade = CascadeType.ALL)
+    private List<TrackingField> trackingFields;
 
     private boolean deleted;
 
@@ -48,7 +52,7 @@ public class TrackingItem {
         return user;
     }
 
-    public Integer getType() {
+    public com.mechanIQ.trackingItem.domain.TrackingItem.TYPE getType() {
         return type;
     }
 
@@ -58,6 +62,10 @@ public class TrackingItem {
 
     public String getDescription() {
         return description;
+    }
+
+    public List<TrackingField> getTrackingFields() {
+        return trackingFields;
     }
 
 

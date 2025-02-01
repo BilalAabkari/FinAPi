@@ -1,8 +1,8 @@
 package com.mechanIQ.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mechanIQ.common.base.BaseEntity;
 import com.mechanIQ.role.domain.Role;
-import com.mechanIQ.trackingItem.domain.TrackingItem;
 import jakarta.persistence.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tbl_user")
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "tbl_role_id"))
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<TrackingItem> trackingItems;
 
     public Long getId() {

@@ -1,4 +1,4 @@
-package com.mechanIQ.trackingItem.adapters;
+package com.mechanIQ.trackingItem.adapters.out;
 
 import com.mechanIQ.trackingItem.domain.TrackingItem;
 import com.mechanIQ.trackingItem.domain.TrackingItemRepository;
