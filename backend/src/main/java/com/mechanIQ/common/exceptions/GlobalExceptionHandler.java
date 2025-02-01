@@ -15,4 +15,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessage> handleConflict(DataIntegrityViolationException ex) {
         return new ResponseEntity<>(new ErrorMessage("Data Integrity Violation", ex.getMessage(),0), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorMessage> handleCustomException(CustomException ex) {
+        return new ResponseEntity<>(new ErrorMessage(ex.getStatus().getReasonPhrase(), ex.getMessage(), ex.getCode()), HttpStatus.CONFLICT);
+    }
 }

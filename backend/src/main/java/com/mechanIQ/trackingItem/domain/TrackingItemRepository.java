@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface TrackingItemRepository {
     Optional<TrackingItem> findById(Long id);
     Optional<TrackingItem> findByUser(User user);
+    TrackingItem save(TrackingItem trackingItem);
 }

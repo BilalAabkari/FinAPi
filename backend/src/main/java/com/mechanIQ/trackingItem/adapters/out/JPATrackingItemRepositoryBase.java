@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface JPATrackingItemRepositoryBase extends JpaRepository<TrackingItem, Long> {
 
     Optional<TrackingItem> findByUser(User user);
+
 }

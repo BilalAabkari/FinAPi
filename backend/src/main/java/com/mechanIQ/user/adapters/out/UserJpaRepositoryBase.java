@@ -1,4 +1,4 @@
-package com.mechanIQ.user.adapters;
+package com.mechanIQ.user.adapters.out;
 
 import com.mechanIQ.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

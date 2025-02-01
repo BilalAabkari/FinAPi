@@ -1,7 +1,8 @@
 package com.mechanIQ.user.application;
 
-import com.mechanIQ.user.adapters.JPAUserRepository;
+import com.mechanIQ.user.adapters.out.JPAUserRepository;
 import com.mechanIQ.user.domain.User;
+import com.mechanIQ.user.domain.UserRepository;
 import com.mechanIQ.user.dto.SignupRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,7 +14,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final JPAUserRepository userRepository;
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
@@ -46,6 +47,15 @@ public class UserService {
         if (user.isEmpty()){
             throw new RuntimeException("User not found.");
         }
+        return user.get();
+    }
+
+    public User findUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()){
+            throw new RuntimeException("User not found.");
+        }
+
         return user.get();
     }
 

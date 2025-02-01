@@ -22,4 +22,9 @@ public class BaseEntity {
     @LastModifiedDate
     @Column(nullable = false)
     private Instant updatedAt;
+
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean deleted;
+
+
 }

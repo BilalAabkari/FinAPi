@@ -40,7 +40,25 @@ public class TrackingItem extends BaseEntity {
     @OneToMany(mappedBy = "trackingItem", cascade = CascadeType.ALL)
     private List<TrackingField> trackingFields;
 
-    private boolean deleted;
+    public TrackingItem() {}
+
+    public TrackingItem(User user,
+                        String name,
+                        String identifier,
+                        Type type,
+                        String category,
+                        String description,
+                        List<TrackingField> trackingFields) {
+
+        this.user = user;
+        this.name = name;
+        this.identifier = identifier;
+        this.type = type;
+        this.category = category;
+        this.description = description;
+        this.trackingFields = trackingFields;
+
+    }
 
     public Long getId() {
         return id;
@@ -73,6 +91,7 @@ public class TrackingItem extends BaseEntity {
     public List<TrackingField> getTrackingFields() {
         return trackingFields;
     }
+
 
 
 }

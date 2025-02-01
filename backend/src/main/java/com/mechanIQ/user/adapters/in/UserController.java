@@ -1,4 +1,4 @@
-package com.mechanIQ.user.adapters;
+package com.mechanIQ.user.adapters.in;
 
 import com.mechanIQ.user.application.UserService;
 import com.mechanIQ.user.domain.User;

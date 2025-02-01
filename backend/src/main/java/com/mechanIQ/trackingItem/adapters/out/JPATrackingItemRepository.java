@@ -27,4 +27,9 @@ public class JPATrackingItemRepository implements TrackingItemRepository {
     public Optional<TrackingItem> findByUser(User user) {
         return jpaTrackingItemRepositoryBase.findByUser(user);
     }
+
+    @Override
+    public TrackingItem save(TrackingItem trackingItem) {
+        return jpaTrackingItemRepositoryBase.save(trackingItem);
+    }
 }

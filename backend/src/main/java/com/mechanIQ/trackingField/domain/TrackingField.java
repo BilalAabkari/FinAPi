@@ -29,9 +29,6 @@ public class TrackingField extends BaseEntity {
     @JoinColumn(nullable = false, name = "tracking_item_id")
     private TrackingItem trackingItem;
 
-    @Column(nullable = false)
-    private boolean deleted;
-
     public Long getId() {
         return id;
     }
