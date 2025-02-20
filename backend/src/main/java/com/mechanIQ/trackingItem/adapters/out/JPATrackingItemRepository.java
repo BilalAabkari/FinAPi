@@ -6,6 +6,7 @@ import com.mechanIQ.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,6 +27,11 @@ public class JPATrackingItemRepository implements TrackingItemRepository {
     @Override
     public Optional<TrackingItem> findByUser(User user) {
         return jpaTrackingItemRepositoryBase.findByUser(user);
+    }
+
+    @Override
+    public List<TrackingItem> findAllByUserId(Long userId) {
+        return jpaTrackingItemRepositoryBase.findAllByUser_Id(userId);
     }
 
     @Override

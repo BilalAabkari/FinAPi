@@ -6,7 +6,7 @@ import {
     Typography,
     useTheme,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CreateTrackingItemModal from "./CreateTrackingItemModal.tsx";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import {
@@ -15,56 +15,26 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { CustomTable } from "../../../components/CustomTable";
-
-interface TrackingItemTBL {
-    id: number;
-    name: string;
-    identifier: string;
-    category: string;
-    type: string;
-    description: string;
-}
+import { useAuth } from "../../../contexts";
+import { useQuery } from "@tanstack/react-query";
+import { TrackingItem, TrackingItemApi } from "../../../API";
 
 const TrackingItemsList = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
-    const [data, setData] = useState<TrackingItemTBL[]>([]);
+    const { user } = useAuth();
+    const trackingItemApi = new TrackingItemApi(user);
 
-    const showMoreDetails = (item: TrackingItemTBL) => {
+    const { data: trackingItems } = useQuery({
+        queryKey: ["trackingItems"],
+        queryFn: trackingItemApi.getTrackingItems,
+    });
+
+    const showMoreDetails = (item: TrackingItem) => {
         console.log(item);
     };
 
     const theme = useTheme();
-
-    useEffect(() => {
-        setData([
-            {
-                id: 1,
-                name: "test1",
-                identifier: "asda",
-                type: "income",
-                category: "Shoes sells",
-                description: "asdas asjdasjk ashd jkahj",
-            },
-            {
-                id: 2,
-                name: "test2",
-                type: "income",
-                identifier: "asda",
-                category: "subscription A",
-                description: "asdas asjdasjk ashd jkahj",
-            },
-            {
-                id: 3,
-                name: "test3",
-                type: "expense",
-                category: "Hosting",
-                identifier: "asda",
-                description: "asdas asjdasjk ashd jkahj",
-            },
-        ]);
-    }, []);
-
-    const columnHelper = createColumnHelper<TrackingItemTBL>();
+    const columnHelper = createColumnHelper<TrackingItem>();
 
     const columns = [
         columnHelper.accessor("name", {
@@ -100,7 +70,7 @@ const TrackingItemsList = () => {
 
     const table = useReactTable({
         columns,
-        data,
+        data: trackingItems || [],
         getCoreRowModel: getCoreRowModel(),
     });
 

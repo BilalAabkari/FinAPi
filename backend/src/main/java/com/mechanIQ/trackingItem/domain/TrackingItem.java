@@ -1,6 +1,9 @@
 package com.mechanIQ.trackingItem.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mechanIQ.common.base.BaseEntity;
 import com.mechanIQ.trackingField.domain.TrackingField;
 import com.mechanIQ.user.domain.User;
@@ -21,6 +24,7 @@ public class TrackingItem extends BaseEntity {
     @GeneratedValue
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -91,6 +95,11 @@ public class TrackingItem extends BaseEntity {
     public List<TrackingField> getTrackingFields() {
         return trackingFields;
     }
+
+    public void setTrackingFields(final List<TrackingField> trackingFields) {
+        this.trackingFields = trackingFields;
+    }
+
 
 
 

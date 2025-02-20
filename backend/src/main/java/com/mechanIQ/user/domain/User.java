@@ -41,6 +41,7 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "tbl_role_id"))
     private Set<Role> roles;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<TrackingItem> trackingItems;
 

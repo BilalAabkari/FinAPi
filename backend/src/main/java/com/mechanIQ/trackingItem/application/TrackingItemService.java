@@ -1,8 +1,10 @@
 package com.mechanIQ.trackingItem.application;
 
 
+import com.mechanIQ.trackingField.domain.TrackingField;
 import com.mechanIQ.trackingItem.domain.TrackingItem;
 import com.mechanIQ.trackingItem.domain.TrackingItemRepository;
+import com.mechanIQ.user.adapters.dto.CreateTrackingFieldRequest;
 import com.mechanIQ.user.adapters.dto.CreateTrackingItemRequest;
 import com.mechanIQ.user.application.UserService;
 import com.mechanIQ.user.domain.User;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TrackingItemService {
@@ -37,6 +40,19 @@ public class TrackingItemService {
                 createTrackingItemRequest.description,
                 new ArrayList<>());
 
+        ArrayList<TrackingField> trackingFields = new ArrayList<>();
+
+        for (CreateTrackingFieldRequest field : createTrackingItemRequest.trackingFields) {
+            TrackingField newTrackingField = new TrackingField(field.name, field.type);
+            newTrackingField.setTrackingItem(trackingItem);
+            trackingFields.add(newTrackingField);
+        }
+
+        trackingItem.setTrackingFields(trackingFields);
         return trackingItemRepository.save(trackingItem);
+    }
+
+    public List<TrackingItem> getTrackingItems(Long userId) {
+        return trackingItemRepository.findAllByUserId(userId);
     }
 }

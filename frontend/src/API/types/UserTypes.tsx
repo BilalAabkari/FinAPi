@@ -1,19 +1,20 @@
 export interface LoginRequest {
-  username: string;
-  password: string;
+    username: string;
+    password: string;
 }
 
 export interface SignupRequest {
-  name: string;
-  surname: string;
-  username: string;
-  email: string;
-  password: string;
+    name: string;
+    surname: string;
+    username: string;
+    email: string;
+    password: string;
 }
 
 export type UserInfo = {
-  username: string;
-  email: string;
-  name: string;
-  surname: string;
+    id?: number;
+    username: string;
+    email: string;
+    name: string;
+    surname: string;
 };
