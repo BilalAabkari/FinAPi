@@ -1,4 +1,15 @@
-# A-spring-boot-project---MechanIQ
+# A Finance management app
+
+This is a web application designed to help users and business to efficiently track their finances. 
+It allows users to record and categorize various types of financial transactions, such as income, expenses, and subscription payments.
+The app provides insightful statistics and analytics to help users understand their financial habits and make informed decisions.
+
+Some features are still on development.
+
+# Tech stack
+
+This app is made with spring boot and React, following an hexagonal architecture for the backend but adapting it to 
+spring boot specifications like JPA so we can get the best of both.
 
 ## Setup
 
