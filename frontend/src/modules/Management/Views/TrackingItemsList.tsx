@@ -17,6 +17,7 @@ import {
 import { CustomTable } from "../../../components/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { TrackingItem, TrackingItemApi } from "../../../API";
+import { TRACKING_ITEM_TYPE_NAMES } from "../../../utils/constants.ts";
 
 const TrackingItemsList = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -46,6 +47,13 @@ const TrackingItemsList = () => {
             columnHelper.accessor("type", {
                 id: "type",
                 header: "Type",
+                cell: (props) => (
+                    <Typography>
+                        {props.row.original.type
+                            ? TRACKING_ITEM_TYPE_NAMES[props.row.original.type]
+                            : ""}
+                    </Typography>
+                ),
             }),
             columnHelper.accessor("category", {
                 id: "category",
@@ -77,7 +85,7 @@ const TrackingItemsList = () => {
     });
 
     return (
-        <Box sx={{ padding: 3, width: "100%" }}>
+        <Box sx={{ padding: 3, width: "100%", overflow: "auto" }}>
             <Typography color={"#353535"} variant={"h5"} paddingBottom={1}>
                 Your tracking items
             </Typography>
