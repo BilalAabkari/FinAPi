@@ -1,14 +1,6 @@
-import {
-    Box,
-    Button,
-    Divider,
-    IconButton,
-    Typography,
-    useTheme,
-} from "@mui/material";
+import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
 import { useMemo, useState } from "react";
 import CreateTrackingItemModal from "./CreateTrackingItemModal.tsx";
-import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import {
     createColumnHelper,
     getCoreRowModel,
@@ -18,6 +10,7 @@ import { CustomTable } from "../../../components/CustomTable";
 import { useQuery } from "@tanstack/react-query";
 import { TrackingItem, TrackingItemApi } from "../../../API";
 import { TRACKING_ITEM_TYPE_NAMES } from "../../../utils/constants.ts";
+import FieldsPreview from "../Components/FieldsPreview.tsx";
 
 const TrackingItemsList = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -26,10 +19,6 @@ const TrackingItemsList = () => {
         queryKey: ["trackingItems"],
         queryFn: TrackingItemApi.getTrackingItems,
     });
-
-    const showMoreDetails = (item: TrackingItem) => {
-        console.log(item);
-    };
 
     const theme = useTheme();
     const columnHelper = useMemo(() => createColumnHelper<TrackingItem>(), []);
@@ -65,13 +54,7 @@ const TrackingItemsList = () => {
             }),
             columnHelper.display({
                 id: "actions",
-                cell: (props) => (
-                    <IconButton
-                        onClick={() => showMoreDetails(props.row.original)}
-                    >
-                        <OpenInNewRoundedIcon />
-                    </IconButton>
-                ),
+                cell: (props) => <FieldsPreview data={props.row.original} />,
                 size: 15,
             }),
         ],
