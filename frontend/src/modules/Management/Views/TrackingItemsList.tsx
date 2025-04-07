@@ -104,7 +104,7 @@ const TrackingItemsList = () => {
                 open={openModal}
                 onClose={() => {
                     setOpenModal(false);
-                    refetch();
+                    void refetch();
                 }}
             />
         </Box>
