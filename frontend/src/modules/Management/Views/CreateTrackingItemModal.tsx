@@ -49,7 +49,7 @@ const CreateTrackingItemModal = ({
     const [fields, setFields] = useState<TrackingItemField[]>([]);
 
     const onAddField = () => {
-        const fieldsCopy = [...fields];
+        const fieldsCopy: TrackingItemField[] = [...fields];
 
         fieldsCopy.push({
             id: TMP_ID.toString(),
@@ -81,10 +81,7 @@ const CreateTrackingItemModal = ({
                 (d: TrackingItemField) => !d.deleted,
             ),
         };
-
         TrackingItemApi.createTrackingItem(body).then(() => onClose());
-
-        console.log(body);
     };
 
     useEffect(() => {

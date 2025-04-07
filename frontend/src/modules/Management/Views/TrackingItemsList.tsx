@@ -89,7 +89,6 @@ const TrackingItemsList = () => {
                         color: theme.palette.text.primary,
                     }}
                     onClick={() => {
-                        console.log("Clicking");
                         setOpenModal(true);
                     }}
                 >
