@@ -1,16 +1,11 @@
 import BaseApi from "./BaseApi.ts";
-import { UserInfo } from "./types/UserTypes.tsx";
 import { ErrorResponse, TrackingItem } from "./types/CommonTypes.tsx";
 import ApiError from "./ApiError.ts";
 
 class TrackingItemApi extends BaseApi {
-    constructor(user: UserInfo | null) {
+    constructor() {
         super();
-        if (user) {
-            this.resourceUrl = `${this.baseUrl}/users/${user.id}/tracking-items`;
-        } else {
-            this.resourceUrl = `${this.baseUrl}/users/tracking-items`;
-        }
+        this.resourceUrl = `${this.baseUrl}/users/tracking-items`;
     }
 
     getTrackingItems = async (): Promise<TrackingItem[]> => {
@@ -23,6 +18,20 @@ class TrackingItemApi extends BaseApi {
 
         return data as TrackingItem[];
     };
+
+    createTrackingItem = async (
+        body: TrackingItem,
+    ): Promise<TrackingItem[]> => {
+        const response: Response = await this.post(this.resourceUrl, body);
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new ApiError(data as ErrorResponse);
+        }
+
+        return data as TrackingItem[];
+    };
 }
 
-export default TrackingItemApi;
+export default new TrackingItemApi();

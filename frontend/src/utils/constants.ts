@@ -9,3 +9,13 @@ export const FIELD_TYPES_NAMES = {
     [FIELD_TYPES.LONG_TEXT]: "Long text",
     [FIELD_TYPES.NUMBER]: "Number",
 };
+
+export const TRACKING_ITEM_TYPES = {
+    EXPENSE: "EXPENSE",
+    INCOME: "INCOME",
+};
+
+export const TRACKING_ITEM_TYPE_NAMES = {
+    [TRACKING_ITEM_TYPES.EXPENSE]: "Expense",
+    [TRACKING_ITEM_TYPES.INCOME]: "Income",
+};

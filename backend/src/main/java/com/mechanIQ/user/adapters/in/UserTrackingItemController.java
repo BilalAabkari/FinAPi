@@ -3,15 +3,17 @@ package com.mechanIQ.user.adapters.in;
 import com.mechanIQ.trackingItem.application.TrackingItemService;
 import com.mechanIQ.trackingItem.domain.TrackingItem;
 import com.mechanIQ.user.adapters.dto.CreateTrackingItemRequest;
+import com.mechanIQ.user.application.CustomUserDetails;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/users/{userId}/tracking-items")
+@RequestMapping("/users/tracking-items")
 public class UserTrackingItemController {
 
     private final TrackingItemService trackingItemService;
@@ -22,14 +24,15 @@ public class UserTrackingItemController {
     }
 
     @PostMapping
-    @PreAuthorize("#userId == authentication.principal.id")
-    public TrackingItem createTrackingItem(@PathVariable Long userId, @Valid @RequestBody CreateTrackingItemRequest createTrackingItemRequest) {
+    public TrackingItem createTrackingItem( @Valid @RequestBody CreateTrackingItemRequest createTrackingItemRequest,
+                                            Authentication authentication) {
+        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getId();
         return trackingItemService.createTrackingItem(userId, createTrackingItemRequest);
     }
 
     @GetMapping
-    @PreAuthorize("#userId == authentication.principal.id")
-    public List<TrackingItem> getTrackingItems(@PathVariable Long userId) {
+    public List<TrackingItem> getTrackingItems(Authentication authentication) {
+        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getId();
         return trackingItemService.getTrackingItems(userId);
     }
 

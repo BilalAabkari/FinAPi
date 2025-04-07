@@ -8,6 +8,7 @@ import {
     Button,
     Grid,
     IconButton,
+    MenuItem,
     Stack,
     Typography,
 } from "@mui/material";
@@ -16,8 +17,14 @@ import { TextInput } from "../../../components/FormInputs";
 import AddIcon from "@mui/icons-material/Add";
 import theme from "../../../utils/theme.tsx";
 import { useEffect, useState } from "react";
-import { FIELD_TYPES, FIELD_TYPES_NAMES } from "../../../utils/constants.ts";
+import {
+    FIELD_TYPES,
+    FIELD_TYPES_NAMES,
+    TRACKING_ITEM_TYPE_NAMES,
+    TRACKING_ITEM_TYPES,
+} from "../../../utils/constants.ts";
 import { DeleteRounded } from "@mui/icons-material";
+import { TrackingItem, TrackingItemApi } from "../../../API";
 
 interface CreateTrackingItemModalProps {
     open: boolean;
@@ -64,14 +71,19 @@ const CreateTrackingItemModal = ({
     };
 
     const create = (data: FieldValues) => {
-        const body = {
+        const body: TrackingItem = {
             category: data.category,
             description: data.description,
             identifier: data.identifier,
             name: data.name,
             type: data.type,
-            fields: data.fields.filter((d: TrackingItemField) => !d.deleted),
+            trackingFields: data.fields.filter(
+                (d: TrackingItemField) => !d.deleted,
+            ),
         };
+
+        TrackingItemApi.createTrackingItem(body).then(() => onClose());
+
         console.log(body);
     };
 
@@ -123,7 +135,21 @@ const CreateTrackingItemModal = ({
                                     name="type"
                                     size="small"
                                     fullWidth
-                                />
+                                    select
+                                >
+                                    <MenuItem value="" disabled></MenuItem>
+                                    {Object.entries(TRACKING_ITEM_TYPES).map(
+                                        ([key, value]: [string, string]) => (
+                                            <MenuItem key={key} value={value}>
+                                                {
+                                                    TRACKING_ITEM_TYPE_NAMES[
+                                                        value
+                                                    ]
+                                                }
+                                            </MenuItem>
+                                        ),
+                                    )}
+                                </TextInput>
                             </Grid>
                             <Grid item xs={6}>
                                 <TextInput
@@ -169,16 +195,18 @@ const CreateTrackingItemModal = ({
                                         required
                                         select
                                     >
-                                        <option
-                                            key="empty"
-                                            value=""
-                                            disabled
-                                        ></option>
+                                        <MenuItem value="" disabled></MenuItem>
                                         {Object.entries(FIELD_TYPES).map(
-                                            ([key, value]) => (
-                                                <option key={key} value={value}>
+                                            ([key, value]: [
+                                                string,
+                                                number,
+                                            ]) => (
+                                                <MenuItem
+                                                    key={key}
+                                                    value={value}
+                                                >
                                                     {FIELD_TYPES_NAMES[value]}
-                                                </option>
+                                                </MenuItem>
                                             ),
                                         )}
                                     </TextInput>

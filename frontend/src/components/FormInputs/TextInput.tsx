@@ -42,11 +42,6 @@ const TextInput = ({
                         size={size}
                         select={select}
                         error={!!fieldState.error}
-                        slotProps={{
-                            select: {
-                                native: true,
-                            },
-                        }}
                     >
                         {children}
                     </TextField>
